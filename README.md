@@ -1,4 +1,4 @@
-# TSM Ranking
+# What is TSM Ranking
 <p align="center">
   <img src="https://raw.githubusercontent.com/TSMRanking/TSMRanking.github.io/main/tsmlogo.png" width="150" />
 </p>
