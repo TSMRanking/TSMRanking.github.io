@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSM Ranking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icons/6.11.0/css/flag-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* HEADER WITH LOGO */
+        .site-header {
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 8px solid #d32f2f;
+        }
+        .logo-container {
+            text-align: center;
+        }
+        .logo-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+        .logo-img {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .site-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #d32f2f;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .site-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-top: 5px;
+            font-weight: 300;
+        }
+
+        /* FIFA Ranking Section - 20 TEAMS ONLY */
+        .ranking-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        /* Header */
+        .ranking-header {
+            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+            color: white;
+            padding: 25px 30px;
+            border-bottom: 4px solid #ffffff;
+        }
+        .ranking-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .ranking-header h2 {
+            font-size: 20px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        /* Info Bar */
+        .info-bar {
+            padding: 15px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .update-date {
+            color: #666;
+            font-size: 14px;
+        }
+        /* Table */
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ranking-table thead {
+            background: #f1f3f5;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .ranking-table th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #d32f2f;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .ranking-table th:first-child { padding-left: 30px; width: 120px; }
+        .ranking-table th:nth-child(2) { width: 400px; }
+        .ranking-table th:nth-child(3) { width: 200px; }
+        .ranking-table tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+        .ranking-table tbody tr:hover {
+            background: #fff5f5;
+        }
+        .ranking-table td {
+            padding: 16px 15px;
+            vertical-align: middle;
+        }
+        .ranking-table td:first-child {
+            padding-left: 30px;
+        }
+        .ranking-table td:last-child {
+            padding-right: 30px;
+        }
+        /* Rank Cell with Icon */
+        .rank-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rank-number {
+            font-weight: 700;
+            font-size: 18px;
+            color: #d32f2f;
+            min-width: 30px;
+        }
+        .rank-change-icon {
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f0f0f0;
+        }
+        .rank-change-up {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+        .rank-change-down {
+            color: #dc3545;
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        .rank-change-same {
+            color: #666;
+            background-color: rgba(108, 117, 125, 0.1);
+        }
+        /* Team Cell */
+        .team-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .team-flag {
+            width: 40px;
+            height: 27px;
+            border-radius: 2px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            border: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+        .team-flag .fi {
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+        }
+        .team-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.2;
+        }
+        .team-code {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+        /* Points Cell with Change */
+        .points-container {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .points-main {
+            font-weight: 700;
+            font-size: 16px;
+            color: #333;
+        }
+        .points-change {
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .points-change-positive {
+            color: #28a745;
+        }
+        .points-change-negative {
+            color: #d32f2f;
+        }
+        .points-change-neutral {
+            color: #666;
+        }
+        .change-icon-small {
+            font-size: 12px;
+            margin-right: 2px;
+        }
+        /* Footer */
+        .ranking-footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+        .teams-count {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .site-header { padding: 15px; }
+            .site-title { font-size: 28px; }
+            .ranking-header { padding: 20px; }
+            .ranking-header h1 { font-size: 22px; }
+            .ranking-header h2 { font-size: 16px; }
+            .info-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+            .update-date { text-align: center; }
+            .ranking-table th:first-child,
+            .ranking-table td:first-child { padding-left: 15px; }
+            .ranking-table th:nth-child(3),
+            .ranking-table td:nth-child(3) { padding-right: 15px; }
+            .team-cell { gap: 10px; }
+            .team-flag { width: 35px; height: 24px; }
+            .points-container {
+                flex-direction: column;
+                gap: 2px;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-title { font-size: 24px; }
+            .logo-img { max-width: 140px; }
+        }
+
+        /* IMPROVEMENTS */
+        .ranking-container {
+            border: 1px solid #ffcdd2;
+        }
+        .ranking-table tbody tr:nth-child(even) {
+            background-color: #fffafa;
+        }
+        .ranking-table tbody tr:nth-child(even):hover {
+            background-color: #fff0f0;
+        }
+        .rank-number.top-3 {
+            font-weight: 900;
+            font-size: 20px;
+        }
+        .rank-number.top-3::after {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #ff9800;
+            border-radius: 50%;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="site-header">
+            <div class="logo-container">
+                <a href="https://discord.gg/touchsoccermultiverse" target="_blank" class="logo-link">
+                    <img src="https://d.top4top.io/p_3696fqu650.png" alt="TSM Ranking Logo" class="logo-img">
+                </a>
+                <div class="site-title">TSM Ranking</div>
+                <div class="site-subtitle">This is The Official TSM Ranking</div>
+            </div>
+        </div>
+
+        <div class="ranking-container">
+            <div class="ranking-header">
+                <h1>TSM TEAM RANKING</h1>
+                <h2 id="ranking-title">OFFICIAL RANKING FOR TSM TEAMS</h2>
+            </div>
+
+            <div class="info-bar">
+                <div class="update-date" id="updateDateDisplay">
+                    Data Source: TSM Ranking • 44 Teams Displayed
+                </div>
+            </div>
+
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th>RK</th>
+                        <th>Team</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body">
+                </tbody>
+            </table>
+
+            <div class="ranking-footer">
+                TSM Ranking System • <span class="teams-count">44</span> here The official website for TSM Ranking, after every fixture there will be an update for the ranking, check the discord for more infos
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const currentGlobalRanking = [
+            { rank: 1, name: "Portugal", code: "POR", points: 1080.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 2, name: "Japan", code: "JPN", points: 1020.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 3, name: "Peru", code: "PER", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 4, name: "Iran", code: "IRN", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 5, name: "Morocco", code: "MAR", points: 1000.00, change: "same", changeValue: 2, pointsChange: 0 },
+            { rank: 6, name: "Netherlands", code: "NED", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 7, name: "England", code: "ENG", points: 1000.00, change: "same", changeValue: 2, pointsChange: 0 },
+            { rank: 8, name: "Brazil", code: "BRA", points: 1000.00, change: "same", changeValue: 3, pointsChange: 0 },
+            { rank: 9, name: "Argentina", code: "ARG", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 10, name: "Greece", code: "GRE", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 11, name: "Colombia", code: "COL", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 12, name: "Senegal", code: "SEN", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 13, name: "Uruguay", code: "URY", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 14, name: "Germany", code: "GER", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 15, name: "France", code: "FRA", points: 1000.00, change: "same", changeValue: 4, pointsChange: 0 },
+            { rank: 16, name: "Canada", code: "CAN", points: 1000.00, change: "same", changeValue: 2, pointsChange: 0 },
+            { rank: 17, name: "Belgium", code: "BEL", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 18, name: "United States", code: "USA", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 19, name: "Spain", code: "ESP", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 20, name: "Mexico", code: "MEX", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 21, name: "Vietnam", code: "VIE", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 22, name: "Ukraine", code: "UKR", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 23, name: "Russia", code: "RUS", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 24, name: "Scotland", code: "SCO", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 25, name: "Norway", code: "NOR", points: 1000.00, change: "same", changeValue: 2, pointsChange: 0 },
+            { rank: 26, name: "Ireland", code: "IRL", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 27, name: "Italy", code: "ITA", points: 1000.00, change: "same", changeValue: 2, pointsChange: 0 },
+            { rank: 28, name: "China", code: "CHN", points: 1000.00, change: "same", changeValue: 3, pointsChange: 0 },
+            { rank: 29, name: "Australia", code: "AUS", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 30, name: "Costa Rica", code: "CRC", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 31, name: "Turkiye", code: "TUR", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 32, name: "South Korea", code: "KOR", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 33, name: "India", code: "IND", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 34, name: "Saudi Arabia", code: "KSA", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 35, name: "Qatar", code: "QAT", points: 1000.00, change: "same", changeValue: 4, pointsChange: 0 },
+            { rank: 36, name: "Poland", code: "POL", points: 1000.00, change: "same", changeValue: 2, pointsChange: 0 },
+            { rank: 37, name: "Finland", code: "FIN", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 38, name: "Sweden", code: "SWE", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 39, name: "North Korea", code: "PRK", points: 1000.00, change: "same", changeValue: 1, pointsChange: 0 },
+            { rank: 40, name: "South Africa", code: "RSA", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 41, name: "Croatia", code: "CRO", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 42, name: "Slovakia", code: "SVK", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 43, name: "San Marino", code: "SMR", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 },
+            { rank: 44, name: "Serbia", code: "SRB", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 }
+        ];
+
+        // flag of teams
+        function getFlagClass(countryCode) {
+            const flagMap = {
+                // european teams
+                'ALB': 'al', 'AND': 'ad', 'ARM': 'am', 'AUT': 'at', 'AZE': 'az',
+                'BEL': 'be', 'BIH': 'ba', 'BLR': 'by', 'BUL': 'bg', 'CRO': 'hr',
+                'CYP': 'cy', 'CZE': 'cz', 'DEN': 'dk', 'ENG': 'gb-eng', 'ESP': 'es',
+                'EST': 'ee', 'FIN': 'fi', 'FRA': 'fr', 'GEO': 'ge', 'GER': 'de',
+                'GIB': 'gi', 'GRE': 'gr', 'HUN': 'hu', 'ISL': 'is', 'ISR': 'il',
+                'ITA': 'it', 'KAZ': 'kz', 'KOS': 'xk', 'LVA': 'lv', 'LIE': 'li',
+                'LTU': 'lt', 'LUX': 'lu', 'MLT': 'mt', 'MDA': 'md', 'MKD': 'mk',
+                'MNE': 'me', 'NED': 'nl', 'NIR': 'gb-nir', 'NOR': 'no', 'POL': 'pl',
+                'POR': 'pt', 'IRL': 'ie', 'ROU': 'ro', 'RUS': 'ru', 'SMR': 'sm',
+                'SCO': 'gb-sct', 'SRB': 'rs', 'SVK': 'sk', 'SVN': 'si', 'SWE': 'se',
+                'SUI': 'ch', 'TUR': 'tr', 'UKR': 'ua', 'WAL': 'gb-wls', 'FRO': 'fo',
+
+                // south american teams
+                'ARG': 'ar', 'BOL': 'bo', 'BRA': 'br', 'CHL': 'cl', 'COL': 'co',
+                'ECU': 'ec', 'PAR': 'py', 'PER': 'pe', 'URY': 'uy', 'VEN': 've', 'SUR': 'sr',
+
+                // north and central america teams
+                'USA': 'us', 'CAN': 'ca', 'MEX': 'mx', 'CRC': 'cr', 'PAN': 'pa',
+                'JAM': 'jm', 'HAI': 'ht', 'HON': 'hn', 'SLV': 'sv', 'TRI': 'tt',
+                'GUY': 'gy', 'CUW': 'cw', 'GRN': 'gd', 'NCA': 'ni', 'DMA': 'dm', 'GTM': 'gt', 'MSR': 'ms', 'CYM': 'ky', 'DOM': 'do', 'SKN': 'kn', 'PUR': 'pr', 'ATG': 'ag', 'CUB': 'cu', 'LCA': 'lc', 'BER': 'bm', 'VIN': 'vc', 'BRB': 'bb', 'BLZ': 'bz', 'COK': 'ck', 'ARU': 'aw', 'VIR': 'vi', 'TCA': 'tc', 'BAH': 'bs', 'VGB': 'vg', 'AIA': 'ai',
+
+                // african
+                'ALG': 'dz', 'ANG': 'ao', 'BEN': 'bj', 'BFA': 'bf', 'BDI': 'bi', 'MWI': 'mw',
+                'CMR': 'cm', 'CPV': 'cv', 'CTA': 'cf', 'TCH': 'td', 'COM': 'km',
+                'CGO': 'cg', 'COD': 'cd', 'CIV': 'ci', 'DJI': 'dj', 'EGY': 'eg',
+                'EQG': 'gq', 'ERI': 'er', 'ETH': 'et', 'GAB': 'ga', 'GAM': 'gm',
+                'GHA': 'gh', 'GUI': 'gn', 'GNB': 'gw', 'KEN': 'ke', 'LES': 'ls',
+                'LBR': 'lr', 'LBY': 'ly', 'MAD': 'mg', 'MLI': 'ml', 'MTN': 'mr',
+                'MRI': 'mu', 'MAR': 'ma', 'MOZ': 'mz', 'NAM': 'na', 'NIG': 'ne',
+                'NGA': 'ng', 'RWA': 'rw', 'STP': 'st', 'SEN': 'sn', 'SEY': 'sc',
+                'SLE': 'sl', 'SOM': 'so', 'RSA': 'za', 'SSD': 'ss', 'SUD': 'sd',
+                'SWZ': 'sz', 'TAN': 'tz', 'TOG': 'tg', 'TUN': 'tn', 'UGA': 'ug',
+                'ZAM': 'zm', 'ZIM': 'zw', 'BWA': 'bw',
+
+                // asian
+                'AFG': 'af', 'AUS': 'au', 'BHR': 'bh', 'BAN': 'bd', 'BHU': 'bt',
+                'BRU': 'bn', 'CAM': 'kh', 'CHN': 'cn', 'TPE': 'tw', 'HKG': 'hk',
+                'IND': 'in', 'IDN': 'id', 'IRN': 'ir', 'IRQ': 'iq', 'JPN': 'jp',
+                'JOR': 'jo', 'KAZ': 'kz', 'PRK': 'kp', 'KOR': 'kr', 'KUW': 'kw',
+                'KGZ': 'kg', 'LAO': 'la', 'LBN': 'lb', 'MAC': 'mo', 'MAY': 'my',
+                'MDV': 'mv', 'MGL': 'mn', 'MYA': 'mm', 'NEP': 'np', 'OMA': 'om',
+                'PAK': 'pk', 'PLE': 'ps', 'PHI': 'ph', 'QAT': 'qa', 'KSA': 'sa',
+                'SIN': 'sg', 'SRI': 'lk', 'SYR': 'sy', 'TJK': 'tj', 'THA': 'th',
+                'TLS': 'tl', 'TKM': 'tm', 'UAE': 'ae', 'UZB': 'uz', 'VIE': 'vn',
+                'YEM': 'ye',
+
+                // oceania
+                'ASA': 'as', 'FIJ': 'fj', 'NCL': 'nc', 'NZL': 'nz', 'SOL': 'sb',
+                'TAH': 'pf', 'TGA': 'to', 'VAN': 'vu', 'SAM': 'ws', 'PNG': 'pg', 'GUM': 'gu',
+            };
+
+            return flagMap[countryCode] || countryCode.toLowerCase();
+        }
+
+        function getRankChangeIcon(changeType, changeValue) {
+            if (!changeType || changeType === "same" || changeValue === 0) {
+                return `<span class="rank-change-icon rank-change-same">●</span>`;
+            }
+
+            if (changeType === "up") {
+                return `<span class="rank-change-icon rank-change-up">↑</span>`;
+            }
+
+            if (changeType === "down") {
+                return `<span class="rank-change-icon rank-change-down">↓</span>`;
+            }
+
+            return `<span class="rank-change-icon rank-change-same">–</span>`;
+        }
+
+        function formatPointsChange(pointsChange) {
+            if (pointsChange === 0 || pointsChange === null || pointsChange === undefined) {
+                return '';
+            }
+
+            const isPositive = pointsChange > 0;
+            const formattedChange = Math.abs(pointsChange).toFixed(2);
+
+            const cssClass = isPositive ? 'points-change-positive' : 'points-change-negative';
+
+            return `<span class="points-change ${cssClass}">(${isPositive ? '+' : '-'}${formattedChange})</span>`;
+        }
+
+        function displayRankings() {
+            const tableBody = document.getElementById('ranking-body');
+
+            tableBody.innerHTML = '';
+
+            currentGlobalRanking.slice(0, 44).forEach(team => {
+                const row = document.createElement('tr');
+                const displayPoints = team.points ? team.points.toFixed(2) : 'N/A';
+                const pointsChangeHTML = formatPointsChange(team.pointsChange);
+                const top3Class = team.rank <= 3 ? 'top-3' : '';
+
+                row.innerHTML = `
+                    <td>
+                        <div class="rank-cell">
+                            ${getRankChangeIcon(team.change, team.changeValue)}
+                            <span class="rank-number ${top3Class}">${team.rank}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="team-cell">
+                            <div class="team-flag">
+                                <span class="fi fi-${getFlagClass(team.code)}"></span>
+                            </div>
+                            <div>
+                                <div class="team-name">${team.name}</div>
+                                <div class="team-code">${team.code}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="points-container">
+                            <span class="points-main">${displayPoints}</span>
+                            ${pointsChangeHTML}
+                        </div>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function initPage() {
+            displayRankings();
+
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('updateDateDisplay').textContent = 
+                `Last Updated: 14 Feburary 2026 • TSM Ranking System`;
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
