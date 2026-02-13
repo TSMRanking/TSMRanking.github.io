@@ -4,6 +4,7 @@
 </p>
 
 <h1 align="center">TSM Ranking</h1>
+
 Hello TSM Players, this is the **OFFICIAL RANKING WEBSITE** For TSM, Join our [Discord Server](https://discord.gg/touchsoccermultiverse) for more information
  
 ## How To Contribution?!:
