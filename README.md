@@ -5,7 +5,7 @@ Hello TSM Players, this is the **OFFICIAL RANKING WEBSITE** For TSM, Join our [D
 To Contribution you have to understand the [Source Code](index.html), and im gonna show you how is it works:
 - To Add a **Team** in the ranking, make sure to put this inside **currentGlobalRanking** function
 ```js
-            { rank: 44, name: "Team 1", code: "TRS", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 }
+{ rank: 44, name: "Team 1", code: "TRS", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 }
 ```
 - **rank** is the important thing, make sure to put the **rank** is a number and put it in the exact place for example if the rank was **45** then, add it under **Team 1**
 
