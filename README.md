@@ -1,9 +1,9 @@
 # TSM Ranking
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TSMRanking/TSMRanking.github.io/main/tsmlogo.png" width="400" />
+  <img src="https://raw.githubusercontent.com/TSMRanking/TSMRanking.github.io/main/tsmlogo.png" width="150" />
 </p>
 
-<h1 align="center">The Skeld</h1>
+<h1 align="center">TSM Ranking</h1>
 Hello TSM Players, this is the **OFFICIAL RANKING WEBSITE** For TSM, Join our [Discord Server](https://discord.gg/touchsoccermultiverse) for more information
  
 ## How To Contribution?!:
