@@ -8,7 +8,7 @@
 Hello TSM Players, this is the **OFFICIAL RANKING WEBSITE** For TSM, Join our [Discord Server](https://discord.gg/touchsoccermultiverse) for more information
  
 ## How To Contribution?!:
-To Contribution you have to understand the [Source Code](index.html), and im gonna show you how is it works:
+To Contribution you have to understand the [Source Code](index.html), and im gonna show you how is it works, and open an **Pull Request** to contribution, by **Forking** the repo, and made a changes in it
 - To Add a **Team** in the ranking, make sure to put this inside **currentGlobalRanking** function
 ```js
 { rank: 44, name: "Team 1", code: "TRS", points: 1000.00, change: "same", changeValue: 0, pointsChange: 0 }
