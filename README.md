@@ -81,6 +81,10 @@ Make sure to use the code that have all letters **BIG**
 
 - **pointsChange** is the points that the team gained or losed, if it was + means it will be green text, if - then red text, if nothing but just numbers like 0.33 means green text
 
+## Ranking Notes:
+- **The Ranking** will be **UPDATED** after any **MatchWeek**, not every match
+- The Calculations must be correct and do the calculation many times to make sure its **TRUE**
+
 ## About TSM Ranking:
 - Made by GozF4x (Zakaria)
 - Join our [Discord Server](https://discord.gg/touchsoccermultiverse)
